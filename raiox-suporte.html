@@ -1,0 +1,918 @@
+<title>Raio-X do SUPORTE</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme: light;
+    --page:        #f9f9f7;
+    --surface:     #fcfcfb;
+    --surface-2:   #f2f1ec;
+    --text-1:      #0b0b0b;
+    --text-2:      #52514e;
+    --text-muted:  #898781;
+    --grid:        #e1e0d9;
+    --axis:        #c3c2b7;
+    --border:      rgba(11,11,11,0.10);
+    --border-2:    rgba(11,11,11,0.16);
+
+    --s1: #2a78d6; /* firewall / blue */
+    --s2: #eb6834; /* oracle / orange */
+    --s3: #1baf7a; /* cloud / aqua */
+    --s4: #eda100; /* rede / yellow */
+    --s5: #e87ba4; /* servidores / magenta */
+    --s6: #7d7a72; /* outras / neutral, not a real categorical slot */
+
+    --good:     #0ca30c;
+    --warning:  #fab219;
+    --serious:  #ec835a;
+    --critical: #d03b3b;
+
+    --seq-100: #cde2fb; --seq-300: #6da7ec; --seq-500: #256abf;
+
+    --font-display: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      color-scheme: dark;
+      --page:        #0d0d0d;
+      --surface:     #1a1a19;
+      --surface-2:   #232320;
+      --text-1:      #ffffff;
+      --text-2:      #c3c2b7;
+      --text-muted:  #898781;
+      --grid:        #2c2c2a;
+      --axis:        #383835;
+      --border:      rgba(255,255,255,0.10);
+      --border-2:    rgba(255,255,255,0.16);
+
+      --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181; --s6: #a8a59c;
+      --good: #0ca30c; --warning: #fab219; --serious: #ec835a; --critical: #e66767;
+      --seq-100: #184f95; --seq-300: #2a78d6; --seq-500: #86b6ef;
+    }
+  }
+  :root[data-theme="dark"]{
+    color-scheme: dark;
+    --page:        #0d0d0d;
+    --surface:     #1a1a19;
+    --surface-2:   #232320;
+    --text-1:      #ffffff;
+    --text-2:      #c3c2b7;
+    --text-muted:  #898781;
+    --grid:        #2c2c2a;
+    --axis:        #383835;
+    --border:      rgba(255,255,255,0.10);
+    --border-2:    rgba(255,255,255,0.16);
+
+    --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181; --s6: #a8a59c;
+    --good: #0ca30c; --warning: #fab219; --serious: #ec835a; --critical: #e66767;
+    --seq-100: #184f95; --seq-300: #2a78d6; --seq-500: #86b6ef;
+  }
+
+  *{ box-sizing: border-box; }
+  body{
+    background: var(--page);
+    color: var(--text-1);
+    font-family: var(--font-display);
+    line-height: 1.5;
+  }
+  .wrap{
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 40px 24px 96px;
+  }
+
+  /* ---------- masthead ---------- */
+  .masthead{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 32px;
+  }
+  .eyebrow{
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  h1{
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 700;
+    margin: 0;
+    text-wrap: balance;
+    letter-spacing: -0.01em;
+  }
+  .masthead p{
+    max-width: 62ch;
+    color: var(--text-2);
+    font-size: 15px;
+    margin: 0;
+  }
+  .masthead-meta{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  section{ margin-bottom: 56px; }
+  .section-head{ margin-bottom: 18px; }
+  .section-head .kicker{
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--s1);
+    display: block;
+    margin-bottom: 6px;
+  }
+  h2{
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0 0 4px;
+    letter-spacing: -0.005em;
+  }
+  .section-head p{
+    color: var(--text-2);
+    font-size: 14.5px;
+    max-width: 68ch;
+    margin: 0;
+  }
+  h3{ font-size: 16.5px; font-weight: 600; margin: 0 0 6px; }
+  p{ margin: 0 0 12px; color: var(--text-2); font-size: 14.5px; }
+  p:last-child{ margin-bottom: 0; }
+  strong{ color: var(--text-1); font-weight: 600; }
+  a{ color: var(--s1); }
+
+  .num{ font-variant-numeric: tabular-nums; font-family: var(--font-mono); }
+
+  /* ---------- stat tiles ---------- */
+  .tiles{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .tile{
+    background: var(--surface);
+    padding: 20px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .tile .label{
+    font-size: 12px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .tile .value{
+    font-family: var(--font-mono);
+    font-size: 27px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+  }
+  .tile .sub{ font-size: 12.5px; color: var(--text-2); }
+  .tile .sub.good{ color: var(--good); }
+  .tile .sub.warn{ color: var(--serious); }
+
+  /* ---------- composition bar ---------- */
+  .comp-bar{
+    display: flex;
+    height: 34px;
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .comp-seg{ height: 100%; position: relative; }
+  .comp-legend{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px 26px;
+    margin-top: 14px;
+  }
+  .legend-item{
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-size: 13.5px;
+  }
+  .swatch{
+    width: 10px; height: 10px;
+    border-radius: 2.5px;
+    display: inline-block;
+    flex: none;
+    transform: translateY(1px);
+  }
+  .legend-item .n{ color: var(--text-muted); font-family: var(--font-mono); font-size: 12.5px; }
+
+  /* ---------- panel / card shell ---------- */
+  .panel{
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+  }
+
+  /* ---------- trend chart ---------- */
+  .chart-svg{ width: 100%; height: auto; display: block; overflow: visible; }
+  .chart-svg .grid-line{ stroke: var(--grid); stroke-width: 1; }
+  .chart-svg .axis-label{ fill: var(--text-muted); font-family: var(--font-mono); font-size: 11px; }
+  .chart-svg .month-label{ fill: var(--text-muted); font-family: var(--font-mono); font-size: 10.5px; }
+  .chart-svg .area{ fill: url(#areaFill); }
+  .chart-svg .line{ fill: none; stroke: var(--s1); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
+  .chart-svg .pt{ fill: var(--surface); stroke: var(--s1); stroke-width: 2.5; }
+  .chart-svg .pt-hit{ fill: transparent; cursor: pointer; }
+  .chart-svg .pt-peak{ fill: var(--critical); stroke: var(--surface); stroke-width: 2; }
+  .callout{
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+  }
+  .callout .cline1{ fill: var(--text-1); font-weight: 600; }
+  .callout .cline2{ fill: var(--text-muted); }
+  .tooltip{
+    position: absolute;
+    pointer-events: none;
+    background: var(--text-1);
+    color: var(--page);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 6px 9px;
+    border-radius: 6px;
+    transform: translate(-50%, -115%);
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity .1s ease;
+    z-index: 5;
+  }
+  .chart-holder{ position: relative; }
+
+  details.data-table{ margin-top: 16px; }
+  details.data-table summary{
+    cursor: pointer;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    letter-spacing: 0.02em;
+  }
+  details.data-table summary:hover{ color: var(--text-1); }
+  table{
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    font-size: 13px;
+  }
+  table caption{ text-align: left; font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
+  th, td{
+    text-align: left;
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border);
+    font-variant-numeric: tabular-nums;
+  }
+  th{ font-weight: 600; color: var(--text-2); font-size: 12px; text-transform: uppercase; letter-spacing: 0.03em; }
+  td.num, th.num{ text-align: right; font-family: var(--font-mono); }
+  tr:last-child td{ border-bottom: none; }
+
+  /* ---------- ranking bars ---------- */
+  .rank-row{
+    display: grid;
+    grid-template-columns: 190px 1fr 74px;
+    align-items: center;
+    gap: 14px;
+    padding: 9px 0;
+  }
+  .rank-row + .rank-row{ border-top: 1px solid var(--border); }
+  .rank-name{ font-size: 13.5px; }
+  .rank-track{ background: var(--surface-2); border-radius: 5px; height: 20px; overflow: hidden; }
+  .rank-fill{ height: 100%; border-radius: 5px; }
+  .rank-val{ font-family: var(--font-mono); font-size: 13px; text-align: right; color: var(--text-2); }
+
+  /* ---------- finding cards ---------- */
+  .findings{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .finding{
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    border-left: 3px solid var(--axis);
+  }
+  .finding.critical{ border-left-color: var(--critical); }
+  .finding.serious{ border-left-color: var(--serious); }
+  .finding.warning{ border-left-color: var(--warning); }
+  .finding-tag{
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: 8px;
+  }
+  .finding.critical .finding-tag{ color: var(--critical); }
+  .finding.serious .finding-tag{ color: var(--serious); }
+  .finding.warning .finding-tag{ color: var(--warning); }
+  .finding code{
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    background: var(--surface-2);
+    padding: 1px 5px;
+    border-radius: 4px;
+  }
+
+  /* ---------- playbook cards ---------- */
+  .playbooks{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+    gap: 18px;
+  }
+  .playbook{
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 24px;
+  }
+  .playbook-head{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 4px;
+  }
+  .playbook-head h3{ margin: 0; }
+  .playbook-share{
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .playbook-dot{
+    width: 9px; height: 9px; border-radius: 50%; display: inline-block; margin-right: 8px;
+  }
+  .playbook h4{
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin: 16px 0 6px;
+    font-weight: 600;
+  }
+  .playbook h4:first-of-type{ margin-top: 14px; }
+  .patterns{ margin: 0; padding-left: 18px; }
+  .patterns li{ font-size: 13.5px; color: var(--text-2); margin-bottom: 4px; }
+  .example-box{
+    background: var(--surface-2);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 13px;
+    color: var(--text-2);
+  }
+  .example-box .who{ font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); display:block; margin-bottom:4px; }
+  .template-box{
+    background: var(--surface-2);
+    border-left: 3px solid var(--s1);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 14px;
+    font-size: 13px;
+    color: var(--text-1);
+    font-style: italic;
+  }
+  .meta-line{
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    font-size: 12.5px;
+    color: var(--text-2);
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+  }
+  .meta-line b{ color: var(--text-1); font-weight: 600; }
+
+  /* ---------- recommendations ---------- */
+  .reco-list{
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--surface);
+  }
+  .reco{
+    display: grid;
+    grid-template-columns: 46px 1fr;
+    gap: 16px;
+    padding: 18px 22px;
+  }
+  .reco + .reco{ border-top: 1px solid var(--border); }
+  .reco .idx{
+    font-family: var(--font-mono);
+    font-size: 20px;
+    color: var(--axis);
+    font-weight: 600;
+  }
+  .reco h3{ margin-bottom: 4px; }
+  .reco p{ margin: 0; }
+
+  footer{
+    border-top: 1px solid var(--border);
+    padding-top: 24px;
+    margin-top: 12px;
+    font-size: 12.5px;
+    color: var(--text-muted);
+  }
+  footer p{ color: var(--text-muted); font-size: 12.5px; }
+
+  @media (max-width: 640px){
+    .rank-row{ grid-template-columns: 110px 1fr 60px; }
+  }
+</style>
+
+<div class="wrap">
+
+  <div class="masthead">
+    <span class="eyebrow">Accerte Tecnologia · Jira Service Management · via Rovo</span>
+    <h1>Raio-X do SUPORTE</h1>
+    <p>Cruzamento dos chamados do projeto <strong>SUPORTE</strong> nos últimos 12 meses para gerar insumos de causa raiz e sugestões de tratativa por categoria — a base para tornar as respostas da equipe mais assertivas.</p>
+    <div class="masthead-meta">
+      <span>Período: 08/set/2025 – 08/set/2026</span>
+      <span>45.402 chamados no total</span>
+      <span>Gerado em 08/set/2026</span>
+    </div>
+  </div>
+
+  <section>
+    <div class="section-head">
+      <span class="kicker">Visão geral</span>
+      <h2>O que a fila SUPORTE processou em 12 meses</h2>
+      <p>Métricas de volume e categoria são contagens exatas do Jira. Tempo de resolução e SLA vêm de uma amostra de 1.200 chamados humanos (~10% do universo) — ver metodologia ao final.</p>
+    </div>
+
+    <div class="tiles">
+      <div class="tile">
+        <span class="label">Chamados no período</span>
+        <span class="value num">45.402</span>
+        <span class="sub">Todos os tipos, projeto SUPORTE</span>
+      </div>
+      <div class="tile">
+        <span class="label">Chamados "humanos"</span>
+        <span class="value num">12.059</span>
+        <span class="sub">26,6% do total — Solicitação, Incidente, Problema</span>
+      </div>
+      <div class="tile">
+        <span class="label">Volume automatizado</span>
+        <span class="value num">62,5%</span>
+        <span class="sub">Alertas Zabbix criados via API, sem intervenção humana na abertura</span>
+      </div>
+      <div class="tile">
+        <span class="label">1ª resposta (mediana)</span>
+        <span class="value num">18 min</span>
+        <span class="sub good">SLA cumprido em 99,2% dos casos</span>
+      </div>
+      <div class="tile">
+        <span class="label">Resolução (mediana)</span>
+        <span class="value num">148 h</span>
+        <span class="sub warn">≈ 6,2 dias corridos · 38% passam de 7 dias</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="kicker">Composição do volume</span>
+      <h2>Só 1 em cada 4 chamados é, de fato, uma solicitação humana</h2>
+      <p>A fila mistura quatro naturezas de trabalho muito diferentes. Tratá-las como um único fluxo de "chamados" distorce qualquer métrica de atendimento.</p>
+    </div>
+
+    <div class="panel">
+      <div class="comp-bar">
+        <div class="comp-seg" style="width:62.5%; background:var(--s1)"></div>
+        <div class="comp-seg" style="width:26.6%; background:var(--s2)"></div>
+        <div class="comp-seg" style="width:7.1%; background:var(--s3)"></div>
+        <div class="comp-seg" style="width:3.8%; background:var(--s4)"></div>
+      </div>
+      <div class="comp-legend">
+        <span class="legend-item"><span class="swatch" style="background:var(--s1)"></span>Alertas Zabbix (automático) <span class="n">28.379 · 62,5%</span></span>
+        <span class="legend-item"><span class="swatch" style="background:var(--s2)"></span>Solicitação / Incidente / Problema <span class="n">12.059 · 26,6%</span></span>
+        <span class="legend-item"><span class="swatch" style="background:var(--s3)"></span>Interno <span class="n">3.231 · 7,1%</span></span>
+        <span class="legend-item"><span class="swatch" style="background:var(--s4)"></span>Tarefa / Subtarefa <span class="n">1.733 · 3,8%</span></span>
+      </div>
+      <details class="data-table">
+        <summary>Ver dados em tabela</summary>
+        <table>
+          <thead><tr><th>Tipo de item</th><th class="num">Chamados</th><th class="num">% do total</th></tr></thead>
+          <tbody>
+            <tr><td>Alertas Zabbix (automático)</td><td class="num">28.379</td><td class="num">62,5%</td></tr>
+            <tr><td>Solicitação de serviço / Incidente / Problema</td><td class="num">12.059</td><td class="num">26,6%</td></tr>
+            <tr><td>Interno</td><td class="num">3.231</td><td class="num">7,1%</td></tr>
+            <tr><td>Tarefa / Subtarefa</td><td class="num">1.733</td><td class="num">3,8%</td></tr>
+          </tbody>
+        </table>
+      </details>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="kicker">Tendência mensal</span>
+      <h2>Volume de chamados humanos, mês a mês</h2>
+      <p>Dezembro/2025 é uma anomalia isolada — ver causa raiz na seção seguinte.</p>
+    </div>
+    <div class="panel">
+      <div class="chart-holder" id="trendHolder">
+        <svg class="chart-svg" viewBox="0 0 900 320" role="img" aria-label="Gráfico de linha do volume mensal de chamados humanos, com pico em dezembro de 2025">
+          <defs>
+            <linearGradient id="areaFill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="var(--s1)" stop-opacity="0.22"/>
+              <stop offset="100%" stop-color="var(--s1)" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+
+          <line class="grid-line" x1="56" y1="280" x2="876" y2="280"/>
+          <line class="grid-line" x1="56" y1="228.8" x2="876" y2="228.8"/>
+          <line class="grid-line" x1="56" y1="177.6" x2="876" y2="177.6"/>
+          <line class="grid-line" x1="56" y1="126.4" x2="876" y2="126.4"/>
+          <line class="grid-line" x1="56" y1="75.2" x2="876" y2="75.2"/>
+          <line class="grid-line" x1="56" y1="24" x2="876" y2="24"/>
+          <text class="axis-label" x="48" y="283" text-anchor="end">0</text>
+          <text class="axis-label" x="48" y="231.8" text-anchor="end">1.000</text>
+          <text class="axis-label" x="48" y="180.6" text-anchor="end">2.000</text>
+          <text class="axis-label" x="48" y="129.4" text-anchor="end">3.000</text>
+          <text class="axis-label" x="48" y="78.2" text-anchor="end">4.000</text>
+          <text class="axis-label" x="48" y="27" text-anchor="end">5.000</text>
+
+          <path class="area" d="M 56.0 253.7 L 130.5 245.4 L 205.1 231.5 L 279.6 42.0 L 354.2 204.9 L 428.7 248.2 L 503.3 248.6 L 577.8 250.4 L 652.4 244.2 L 726.9 261.6 L 801.5 252.7 L 876.0 259.2 L 876.0 280.0 L 56.0 280.0 Z"/>
+          <path class="line" d="M 56.0 253.7 L 130.5 245.4 L 205.1 231.5 L 279.6 42.0 L 354.2 204.9 L 428.7 248.2 L 503.3 248.6 L 577.8 250.4 L 652.4 244.2 L 726.9 261.6 L 801.5 252.7 L 876.0 259.2"/>
+
+          <text class="callout" x="279.6" y="20" text-anchor="middle">
+            <tspan class="cline1" x="279.6" dy="0">4.648</tspan>
+            <tspan class="cline2" x="279.6" dy="13">quase 7× a média</tspan>
+          </text>
+
+          <g class="pts">
+            <circle class="pt" cx="56.0" cy="253.7" r="3.5"/>
+            <circle class="pt" cx="130.5" cy="245.4" r="3.5"/>
+            <circle class="pt" cx="205.1" cy="231.5" r="3.5"/>
+            <circle class="pt-peak" cx="279.6" cy="42.0" r="5"/>
+            <circle class="pt" cx="354.2" cy="204.9" r="3.5"/>
+            <circle class="pt" cx="428.7" cy="248.2" r="3.5"/>
+            <circle class="pt" cx="503.3" cy="248.6" r="3.5"/>
+            <circle class="pt" cx="577.8" cy="250.4" r="3.5"/>
+            <circle class="pt" cx="652.4" cy="244.2" r="3.5"/>
+            <circle class="pt" cx="726.9" cy="261.6" r="3.5"/>
+            <circle class="pt" cx="801.5" cy="252.7" r="3.5"/>
+            <circle class="pt" cx="876.0" cy="259.2" r="3.5"/>
+          </g>
+
+          <g class="hits">
+            <circle class="pt-hit" data-m="Set/25" data-v="513" cx="56.0" cy="253.7" r="14"/>
+            <circle class="pt-hit" data-m="Out/25" data-v="676" cx="130.5" cy="245.4" r="14"/>
+            <circle class="pt-hit" data-m="Nov/25" data-v="947" cx="205.1" cy="231.5" r="14"/>
+            <circle class="pt-hit" data-m="Dez/25" data-v="4.648" cx="279.6" cy="42.0" r="14"/>
+            <circle class="pt-hit" data-m="Jan/26" data-v="1.467" cx="354.2" cy="204.9" r="14"/>
+            <circle class="pt-hit" data-m="Fev/26" data-v="622" cx="428.7" cy="248.2" r="14"/>
+            <circle class="pt-hit" data-m="Mar/26" data-v="613" cx="503.3" cy="248.6" r="14"/>
+            <circle class="pt-hit" data-m="Abr/26" data-v="579" cx="577.8" cy="250.4" r="14"/>
+            <circle class="pt-hit" data-m="Mai/26" data-v="700" cx="652.4" cy="244.2" r="14"/>
+            <circle class="pt-hit" data-m="Jun/26" data-v="359" cx="726.9" cy="261.6" r="14"/>
+            <circle class="pt-hit" data-m="Jul/26" data-v="533" cx="801.5" cy="252.7" r="14"/>
+            <circle class="pt-hit" data-m="Ago/26" data-v="406" cx="876.0" cy="259.2" r="14"/>
+          </g>
+
+          <g class="month-labels">
+            <text class="month-label" x="56.0" y="298" text-anchor="middle">Set/25</text>
+            <text class="month-label" x="130.5" y="298" text-anchor="middle">Out</text>
+            <text class="month-label" x="205.1" y="298" text-anchor="middle">Nov</text>
+            <text class="month-label" x="279.6" y="298" text-anchor="middle">Dez</text>
+            <text class="month-label" x="354.2" y="298" text-anchor="middle">Jan/26</text>
+            <text class="month-label" x="428.7" y="298" text-anchor="middle">Fev</text>
+            <text class="month-label" x="503.3" y="298" text-anchor="middle">Mar</text>
+            <text class="month-label" x="577.8" y="298" text-anchor="middle">Abr</text>
+            <text class="month-label" x="652.4" y="298" text-anchor="middle">Mai</text>
+            <text class="month-label" x="726.9" y="298" text-anchor="middle">Jun</text>
+            <text class="month-label" x="801.5" y="298" text-anchor="middle">Jul</text>
+            <text class="month-label" x="876.0" y="298" text-anchor="middle">Ago</text>
+          </g>
+        </svg>
+        <div class="tooltip" id="trendTooltip"></div>
+      </div>
+      <details class="data-table">
+        <summary>Ver dados em tabela</summary>
+        <table>
+          <thead><tr><th>Mês</th><th class="num">Chamados humanos</th></tr></thead>
+          <tbody>
+            <tr><td>Set/25</td><td class="num">513</td></tr>
+            <tr><td>Out/25</td><td class="num">676</td></tr>
+            <tr><td>Nov/25</td><td class="num">947</td></tr>
+            <tr><td>Dez/25</td><td class="num">4.648</td></tr>
+            <tr><td>Jan/26</td><td class="num">1.467</td></tr>
+            <tr><td>Fev/26</td><td class="num">622</td></tr>
+            <tr><td>Mar/26</td><td class="num">613</td></tr>
+            <tr><td>Abr/26</td><td class="num">579</td></tr>
+            <tr><td>Mai/26</td><td class="num">700</td></tr>
+            <tr><td>Jun/26</td><td class="num">359</td></tr>
+            <tr><td>Jul/26</td><td class="num">533</td></tr>
+            <tr><td>Ago/26</td><td class="num">406</td></tr>
+          </tbody>
+        </table>
+      </details>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="kicker">Categorias · Tecnologia-Serviço</span>
+      <h2>Onde os chamados humanos se concentram</h2>
+      <p>Contagem exata dos 12.059 chamados humanos por categoria (campo <code>Tecnologia - Serviço</code>).</p>
+    </div>
+    <div class="panel">
+      <div class="rank-row">
+        <span class="rank-name">Segurança / Firewall</span>
+        <div class="rank-track"><div class="rank-fill" style="width:100%; background:var(--s1)"></div></div>
+        <span class="rank-val">7.165</span>
+      </div>
+      <div class="rank-row">
+        <span class="rank-name">Banco de Dados Oracle</span>
+        <div class="rank-track"><div class="rank-fill" style="width:28.4%; background:var(--s2)"></div></div>
+        <span class="rank-val">2.035</span>
+      </div>
+      <div class="rank-row">
+        <span class="rank-name">Cloud</span>
+        <div class="rank-track"><div class="rank-fill" style="width:17.4%; background:var(--s3)"></div></div>
+        <span class="rank-val">1.246</span>
+      </div>
+      <div class="rank-row">
+        <span class="rank-name">Rede</span>
+        <div class="rank-track"><div class="rank-fill" style="width:15.1%; background:var(--s4)"></div></div>
+        <span class="rank-val">1.085</span>
+      </div>
+      <div class="rank-row">
+        <span class="rank-name">Servidores</span>
+        <div class="rank-track"><div class="rank-fill" style="width:3.1%; background:var(--s5)"></div></div>
+        <span class="rank-val">220</span>
+      </div>
+      <div class="rank-row">
+        <span class="rank-name">Outras (6 categorias)</span>
+        <div class="rank-track"><div class="rank-fill" style="width:4.3%; background:var(--s6)"></div></div>
+        <span class="rank-val">308</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="kicker">Causas raiz recorrentes</span>
+      <h2>O que está por trás dos números</h2>
+      <p>Cinco padrões que explicam a maior parte do volume e que, tratados, mudam a métrica de forma estrutural — não caso a caso.</p>
+    </div>
+    <div class="findings">
+      <div class="finding critical">
+        <span class="finding-tag">01 · Volume</span>
+        <h3>60% da fila "Firewall" é alerta automático, não pedido humano</h3>
+        <p>Relatórios semanais de segurança (<code>Weekly Security Report</code>) e alertas de IPS/FortiAnalyzer (<code>tentou atacar…</code>) chegam por e-mail e viram <code>Solicitação de serviço</code> uma a uma. A maior categoria da fila é, em boa parte, tráfego informativo — não decisão humana caso a caso.</p>
+      </div>
+      <div class="finding critical">
+        <span class="finding-tag">02 · Pico de Dez/25</span>
+        <h3>4.648 chamados em um mês — 93% do mesmo gatilho</h3>
+        <p>92,9% do pico de dezembro foram alertas de <code>Relatorio FortiAnalyzer</code>. Boa parte veio de uma rajada de alertas críticos de IPS do mesmo IP interno (<code>10.100.68.116</code>) no Grupo Dellys, abrindo dezenas de chamados em minutos para CVEs distintos.</p>
+      </div>
+      <div class="finding serious">
+        <span class="finding-tag">03 · Triagem</span>
+        <h3>Prioridade não está sendo usada de fato</h3>
+        <p>Na amostra, 99,9% dos chamados humanos estão marcados como <strong>Médio</strong>. O campo existe mas não diferencia urgência — um chamado de "lentidão travando faturamento" e um "relatório semanal sem achados" competem pela mesma fila.</p>
+      </div>
+      <div class="finding warning">
+        <span class="finding-tag">04 · Concentração</span>
+        <h3>Um cliente concentra ~39% da amostra</h3>
+        <p>O <strong>Grupo Dellys</strong> aparece em quase 4 de cada 10 chamados da amostra — reflexo de ambiente com muitas unidades/filiais monitoradas. Qualquer ajuste de automação nesse cliente tem efeito desproporcional no volume total.</p>
+      </div>
+      <div class="finding warning">
+        <span class="finding-tag">05 · Qualidade de dado</span>
+        <h3>Campo "Resolução" nunca é preenchido</h3>
+        <p>0% dos chamados fechados na amostra têm o campo nativo <code>Resolução</code> preenchido — o fechamento acontece só por automação de status. Sem esse campo, causa raiz só é rastreável hoje pela categoria, não pelo desfecho real.</p>
+      </div>
+      <div class="finding">
+        <span class="finding-tag">06 · Roteamento</span>
+        <h3>Time de atendimento em branco em 67% dos casos</h3>
+        <p>O campo <code>Team</code> só é preenchido em ~1 de cada 3 chamados humanos da amostra. Sem equipe atribuída de forma consistente, fica difícil medir carga por especialidade (Redes, Banco de Dados, Cloud…).</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="kicker">SLA e tempo de resolução</span>
+      <h2>A meta é cumprida, mas o relógio real é lento</h2>
+      <p>O breach formal de SLA é baixo — sinal de metas calendário/negócio bastante folgadas, não necessariamente de atendimento rápido em tempo corrido.</p>
+    </div>
+    <div class="panel">
+      <table>
+        <caption>Amostra de 708 chamados humanos com ciclo de SLA de resolução completo</caption>
+        <thead>
+          <tr><th>Categoria</th><th class="num">Tempo mediano</th><th class="num">Chamados &gt; 1 SLA (breach)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Backup Cloud</td><td class="num">371,8 h</td><td class="num" style="color:var(--critical)">38,5%</td></tr>
+          <tr><td>Alertas Zabbix via solicitação</td><td class="num">153,2 h</td><td class="num" style="color:var(--serious)">9,5%</td></tr>
+          <tr><td>Banco de Dados Oracle</td><td class="num">159,3 h</td><td class="num" style="color:var(--serious)">7,7%</td></tr>
+          <tr><td>Rede</td><td class="num">139,9 h</td><td class="num">3,8%</td></tr>
+          <tr><td>Cloud</td><td class="num">193,2 h</td><td class="num">2,8%</td></tr>
+          <tr><td>Segurança / Firewall</td><td class="num">146,3 h</td><td class="num">1,9%</td></tr>
+          <tr><td>Servidores</td><td class="num">142,1 h</td><td class="num" style="color:var(--good)">0,0%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="kicker">Base de sugestões de tratativa</span>
+      <h2>Playbooks por categoria</h2>
+      <p>Padrões extraídos de chamados reais e fechados nas quatro maiores categorias — o que costuma chegar, o que costuma resolver, e o que pedir logo de cara para evitar idas e vindas.</p>
+    </div>
+
+    <div class="playbooks">
+
+      <div class="playbook">
+        <div class="playbook-head">
+          <h3><span class="playbook-dot" style="background:var(--s1)"></span>Segurança / Firewall</h3>
+          <span class="playbook-share">59,4% dos chamados humanos</span>
+        </div>
+        <h4>Padrões mais comuns</h4>
+        <ul class="patterns">
+          <li>Relatório semanal de segurança (FortiAnalyzer) e alertas de IPS — revisão e confirmação</li>
+          <li>Liberação de acesso a site/domínio específico</li>
+          <li>Criação de VPN (usuário ou site-to-site) e liberação de MAC/dispositivo</li>
+          <li>Evento de HA Failover (alternância automática de cluster)</li>
+        </ul>
+        <h4>Exemplo real</h4>
+        <div class="example-box"><span class="who">Chamado fechado · categoria Firewall</span>"Alternância automática entre os equipamentos do cluster de firewall (Failover)" — log automático do próprio Fortigate.</div>
+        <h4>Resposta sugerida</h4>
+        <div class="template-box">"Identificamos uma instabilidade em [link/interface] que causou alternância automática (failover) entre os equipamentos do cluster. O sistema de redundância atuou e a continuidade dos serviços foi mantida. Nenhuma ação manual foi necessária."</div>
+        <div class="meta-line">
+          <span><b>Pedir de início:</b> IP/domínio + unidade/filial + firewall de origem</span>
+          <span><b>Prioridade sugerida:</b> Baixa, exceto ataque confirmado</span>
+        </div>
+      </div>
+
+      <div class="playbook">
+        <div class="playbook-head">
+          <h3><span class="playbook-dot" style="background:var(--s2)"></span>Banco de Dados Oracle</h3>
+          <span class="playbook-share">16,9% dos chamados humanos</span>
+        </div>
+        <h4>Padrões mais comuns</h4>
+        <ul class="patterns">
+          <li>Avisos de manutenção programada da Oracle Cloud (Exadata) — só comunicar e fechar</li>
+          <li>Lentidão / lock — sempre falta HOST e SERVICE_NAME na primeira mensagem</li>
+          <li>Criação/clonagem de ambiente de homologação (PDB)</li>
+          <li>Restauração de backup — cliente costuma perguntar prazo já na abertura</li>
+        </ul>
+        <h4>Exemplo real</h4>
+        <div class="example-box"><span class="who">Chamado fechado · Lentidão/lock</span>"Estamos com a rotina de faturamento travada" → resposta incluiu HOST, SERVICE_NAME e diagnóstico de consumo de CPU antes de agir.</div>
+        <h4>Resposta sugerida</h4>
+        <div class="template-box">"Verificamos o ambiente [HOST / SERVICE_NAME]: consumo de CPU/IO está [normal/elevado]. [Se lock] Sessão bloqueante identificada: [sessão/objeto]. Ação aplicada: [encerrar sessão / criar índice / outra]."</div>
+        <div class="meta-line">
+          <span><b>Pedir de início:</b> HOST, SERVICE_NAME, horário do problema</span>
+          <span><b>Prioridade sugerida:</b> Alta se contiver "lentidão", "lock", "trava", "indisponível"</span>
+        </div>
+      </div>
+
+      <div class="playbook">
+        <div class="playbook-head">
+          <h3><span class="playbook-dot" style="background:var(--s3)"></span>Infraestrutura Cloud</h3>
+          <span class="playbook-share">10,3% dos chamados humanos</span>
+        </div>
+        <h4>Padrões mais comuns</h4>
+        <ul class="patterns">
+          <li>Alerta de orçamento estourado (<code>budget spending exceeded</code>)</li>
+          <li>Criação/configuração de VM</li>
+          <li>Paralisação e religamento de containers em horário fixo — recorrente, mesmo cliente</li>
+          <li><code>Instance Failed</code> — falha pontual de instância</li>
+        </ul>
+        <h4>Exemplo real</h4>
+        <div class="example-box"><span class="who">Chamado fechado · Budget</span>"Consumo do compartimento ultrapassou o orçamento" → resposta padrão: "cliente sem crédito no commitment."</div>
+        <h4>Resposta sugerida</h4>
+        <div class="template-box">"O consumo do compartimento [X] ultrapassou o orçamento definido ([valor]). [Se sem contrato/crédito ativo: informar]. Recomendamos revisar os recursos ativos ou ajustar o limite do orçamento."</div>
+        <div class="meta-line">
+          <span><b>Candidato à automação:</b> alerta de budget e paralisação agendada de containers</span>
+          <span><b>Prioridade sugerida:</b> Baixa (informativo) salvo indisponibilidade</span>
+        </div>
+      </div>
+
+      <div class="playbook">
+        <div class="playbook-head">
+          <h3><span class="playbook-dot" style="background:var(--s4)"></span>Infraestrutura Rede</h3>
+          <span class="playbook-share">9,0% dos chamados humanos</span>
+        </div>
+        <h4>Padrões mais comuns</h4>
+        <ul class="patterns">
+          <li>Criação de VPN (consultor/usuário ou site-to-site)</li>
+          <li>Liberação de acesso a site/domínio bloqueado</li>
+          <li>Adição de servidor/MAC a grupo ou regra</li>
+          <li>Relatório semanal de segurança (mesmo fluxo do Firewall)</li>
+        </ul>
+        <h4>Exemplo real</h4>
+        <div class="example-box"><span class="who">Chamado fechado · Liberação de acesso</span>Pedido inicial não trazia os subdomínios usados pelo site — 4 dias e 3 idas e vindas até identificar todos os domínios envolvidos.</div>
+        <h4>Resposta sugerida</h4>
+        <div class="template-box">"Para liberar o acesso, confirme: domínio(s)/subdomínio(s) completos, unidade/filial e IP do firewall de origem. Com esses dados aplicamos a liberação e confirmamos com print da regra."</div>
+        <div class="meta-line">
+          <span><b>Pedir de início:</b> domínio(s) completos + unidade + firewall de origem</span>
+          <span><b>Prioridade sugerida:</b> Média, Alta se bloquear operação em andamento</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="kicker">Recomendações</span>
+      <h2>Onde agir primeiro</h2>
+    </div>
+    <div class="reco-list">
+      <div class="reco">
+        <span class="idx">01</span>
+        <div>
+          <h3>Separar alerta automatizado de chamado acionável</h3>
+          <p>Relatórios FortiAnalyzer sem achados, HA Failover, avisos de manutenção Oracle/Cloud e alertas de budget não deveriam competir na mesma fila que um pedido humano com decisão a tomar. Um Request Type ou automação de triagem separada tira ~60% do ruído da fila "Firewall" sozinho.</p>
+        </div>
+      </div>
+      <div class="reco">
+        <span class="idx">02</span>
+        <div>
+          <h3>Ativar prioridade por palavra-chave</h3>
+          <p>Regra simples no portal/automação: termos como "lentidão", "indisponível", "lock", "trava", "ataque confirmado" no resumo sobem a prioridade para Alta automaticamente. Hoje isso não acontece — 99,9% fica em Médio.</p>
+        </div>
+      </div>
+      <div class="reco">
+        <span class="idx">03</span>
+        <div>
+          <h3>Formulários de portal por tipo de pedido</h3>
+          <p>Para "Liberação de acesso" e "VPN", pedir de início os campos que hoje faltam (domínio completo, IP, unidade, HOST/SERVICE_NAME) — o caso Econet Editora (4 dias, 3 idas e vindas) e o caso de lentidão em banco mostram o custo de pedir depois.</p>
+        </div>
+      </div>
+      <div class="reco">
+        <span class="idx">04</span>
+        <div>
+          <h3>Investigar o host 10.100.68.116 (Grupo Dellys)</h3>
+          <p>Foi o gatilho direto do pico de dezembro/2025. Tunar o threshold de deduplicação de IPS/FortiAnalyzer por host+CVE numa janela curta evita que um único evento vire dezenas de chamados.</p>
+        </div>
+      </div>
+      <div class="reco">
+        <span class="idx">05</span>
+        <div>
+          <h3>Preencher "Resolução" ao fechar o chamado</h3>
+          <p>Hoje 0% dos chamados fechados na amostra têm esse campo nativo preenchido. Sem ele, esta base de causa raiz depende só da categoria "Tecnologia-Serviço" — útil, mas mais grossa do que um código de resolução dedicado.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p><strong>Metodologia</strong> — Totais gerais e contagens por categoria (composição do volume, tendência mensal, ranking por categoria): contagens exatas via JQL no Jira, projeto <code>SUPORTE</code>, campo <code>Tecnologia - Serviço</code>, período de 08/set/2025 a 08/set/2026. Distribuição de prioridade/status/equipe, tempo de resolução e taxa de SLA: amostra de 1.200 chamados humanos (100 por mês, ~10% do universo de 12.059). Exemplos de chamados nos playbooks são reais, parafraseados e sem dados de contato individuais. Fonte: Jira Service Management (Accerte Tecnologia) via Atlassian Rovo.</p>
+  </footer>
+
+</div>
+
+<script>
+  (function(){
+    var holder = document.getElementById('trendHolder');
+    var tooltip = document.getElementById('trendTooltip');
+    if(!holder || !tooltip) return;
+    var hits = holder.querySelectorAll('.pt-hit');
+    hits.forEach(function(hit){
+      hit.addEventListener('mouseenter', function(e){
+        var m = hit.getAttribute('data-m');
+        var v = hit.getAttribute('data-v');
+        tooltip.textContent = m + ' — ' + v + ' chamados';
+        tooltip.style.opacity = '1';
+      });
+      hit.addEventListener('mousemove', function(e){
+        var rect = holder.getBoundingClientRect();
+        var x = e.clientX - rect.left;
+        var y = e.clientY - rect.top;
+        tooltip.style.left = x + 'px';
+        tooltip.style.top = y + 'px';
+      });
+      hit.addEventListener('mouseleave', function(){
+        tooltip.style.opacity = '0';
+      });
+    });
+  })();
+</script>
